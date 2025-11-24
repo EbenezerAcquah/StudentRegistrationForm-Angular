@@ -1,0 +1,8 @@
+<form [formGroup]="form">
+    <input type="text" formControlName="firstName" />
+    <input type="text" formControlName="lastName" />
+    <input type="text" formControlName="firstName" />
+    <input type="text" formControlName="phoneNumber" />
+
+    <button type="submit" [disabled]="form.invalid">Submit</button>
+</form>
