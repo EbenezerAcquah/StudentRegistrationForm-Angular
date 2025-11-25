@@ -2,6 +2,7 @@ import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormDemo } from "./reactive-form-demo/reactive-form-demo";
+import { StudentRegistrationComponent } from "./student-registration/student-registration.component";
 
 interface SubmittedFormData {
   fullName: string;
@@ -14,7 +15,7 @@ interface SubmittedFormData {
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, FormsModule, ReactiveFormDemo],
+  imports: [CommonModule, FormsModule, ReactiveFormDemo, StudentRegistrationComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

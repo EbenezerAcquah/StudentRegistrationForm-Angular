@@ -1,0 +1,267 @@
+<div class="registration-container">
+  <h1>Student Registration & Course Selection Form</h1>
+  
+  <form [formGroup]="studentForm" (ngSubmit)="onSubmit()" class="registration-form">
+    
+    <!-- SECTION 1: PERSONAL INFORMATION -->
+    <div class="form-section">
+      <h2>Personal Information</h2>
+      <div formGroupName="personal" class="form-group-container">
+        
+        <!-- Full Name -->
+        <div class="form-group">
+          <label for="fullName">Full Name *</label>
+          <input
+            type="text"
+            id="fullName"
+            formControlName="fullName"
+            class="form-control"
+            [ngClass]="{'is-invalid': studentForm.get('personal.fullName')?.invalid && studentForm.get('personal.fullName')?.touched}"
+          />
+          <div class="character-count">{{ fullNameCharCount }} characters</div>
+          <div class="error-message" *ngIf="studentForm.get('personal.fullName')?.invalid && studentForm.get('personal.fullName')?.touched">
+            <span *ngIf="studentForm.get('personal.fullName')?.errors?.['required']">Full Name is required</span>
+            <span *ngIf="studentForm.get('personal.fullName')?.errors?.['minlength']">Full Name must be at least 3 characters</span>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            class="form-control"
+            [ngClass]="{'is-invalid': studentForm.get('personal.email')?.invalid && studentForm.get('personal.email')?.touched}"
+          />
+          <div class="error-message" *ngIf="studentForm.get('personal.email')?.invalid && studentForm.get('personal.email')?.touched">
+            <span *ngIf="studentForm.get('personal.email')?.errors?.['required']">Email is required</span>
+            <span *ngIf="studentForm.get('personal.email')?.errors?.['email']">Invalid email format</span>
+          </div>
+        </div>
+
+        <!-- Phone -->
+        <div class="form-group">
+          <label for="phone">Phone *</label>
+          <input
+            type="text"
+            id="phone"
+            formControlName="phone"
+            class="form-control"
+            placeholder="1234567890"
+            [ngClass]="{'is-invalid': studentForm.get('personal.phone')?.invalid && studentForm.get('personal.phone')?.touched}"
+          />
+          <div class="error-message" *ngIf="studentForm.get('personal.phone')?.invalid && studentForm.get('personal.phone')?.touched">
+            <span *ngIf="studentForm.get('personal.phone')?.errors?.['required']">Phone is required</span>
+            <span *ngIf="studentForm.get('personal.phone')?.errors?.['pattern']">Phone must contain only digits</span>
+          </div>
+        </div>
+
+        <!-- Gender -->
+        <div class="form-group">
+          <label for="gender">Gender *</label>
+          <select
+            id="gender"
+            formControlName="gender"
+            class="form-control"
+            [ngClass]="{'is-invalid': studentForm.get('personal.gender')?.invalid && studentForm.get('personal.gender')?.touched}"
+          >
+            <option value="">-- Select Gender --</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+          <div class="error-message" *ngIf="studentForm.get('personal.gender')?.invalid && studentForm.get('personal.gender')?.touched">
+            <span *ngIf="studentForm.get('personal.gender')?.errors?.['required']">Gender is required</span>
+          </div>
+        </div>
+
+        <!-- Date of Birth -->
+        <div class="form-group">
+          <label for="dob">Date of Birth *</label>
+          <input
+            type="date"
+            id="dob"
+            formControlName="dateOfBirth"
+            class="form-control"
+            [ngClass]="{'is-invalid': studentForm.get('personal.dateOfBirth')?.invalid && studentForm.get('personal.dateOfBirth')?.touched}"
+          />
+          <div class="error-message" *ngIf="studentForm.get('personal.dateOfBirth')?.invalid && studentForm.get('personal.dateOfBirth')?.touched">
+            <span *ngIf="studentForm.get('personal.dateOfBirth')?.errors?.['required']">Date of Birth is required</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: ADDRESS -->
+    <div class="form-section">
+      <h2>Address</h2>
+      <div formGroupName="address" class="form-group-container">
+        
+        <!-- City -->
+        <div class="form-group">
+          <label for="city">City *</label>
+          <input
+            type="text"
+            id="city"
+            formControlName="city"
+            class="form-control"
+            [ngClass]="{'is-invalid': studentForm.get('address.city')?.invalid && studentForm.get('address.city')?.touched}"
+          />
+          <div class="error-message" *ngIf="studentForm.get('address.city')?.invalid && studentForm.get('address.city')?.touched">
+            <span *ngIf="studentForm.get('address.city')?.errors?.['required']">City is required</span>
+          </div>
+        </div>
+
+        <!-- Region -->
+        <div class="form-group">
+          <label for="region">Region *</label>
+          <input
+            type="text"
+            id="region"
+            formControlName="region"
+            class="form-control"
+            [ngClass]="{'is-invalid': studentForm.get('address.region')?.invalid && studentForm.get('address.region')?.touched}"
+          />
+          <div class="error-message" *ngIf="studentForm.get('address.region')?.invalid && studentForm.get('address.region')?.touched">
+            <span *ngIf="studentForm.get('address.region')?.errors?.['required']">Region is required</span>
+          </div>
+        </div>
+
+        <!-- Digital Address -->
+        <div class="form-group">
+          <label for="digitalAddress">Digital Address</label>
+          <input
+            type="text"
+            id="digitalAddress"
+            formControlName="digitalAddress"
+            class="form-control"
+            placeholder="Optional"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: COURSE SELECTION -->
+    <div class="form-section">
+      <h2>Course Selection *</h2>
+      <div class="course-info">
+        Selected: {{ getSelectedCoursesCount() }} course(s)
+      </div>
+      <div class="courses-container" formArrayName="courses">
+        <div class="course-item" *ngFor="let course of courses; let i = index">
+          <input
+            type="checkbox"
+            [id]="'course-' + course.id"
+            [formControlName]="i"
+            class="course-checkbox"
+          />
+          <label [for]="'course-' + course.id" class="course-label">{{ course.name }}</label>
+        </div>
+      </div>
+      <div class="error-message" *ngIf="studentForm.get('courses')?.invalid && studentForm.get('courses')?.touched">
+        <span *ngIf="studentForm.get('courses')?.errors?.['required']">Please select at least one course</span>
+      </div>
+    </div>
+
+    <!-- SECTION 4: EMERGENCY CONTACT (CONDITIONAL) -->
+    <div class="form-section">
+      <h2>Emergency Contact</h2>
+      
+      <!-- Toggle -->
+      <div class="form-group">
+        <label class="toggle-label">
+          <input
+            type="checkbox"
+            formControlName="hasEmergencyContact"
+            class="toggle-checkbox"
+          />
+          <span>Have emergency contact?</span>
+        </label>
+      </div>
+
+      <!-- Emergency Contact Fields (Conditional) -->
+      <div *ngIf="studentForm.get('hasEmergencyContact')?.value" class="emergency-section" formGroupName="emergencyContact">
+        
+        <!-- Contact Name -->
+        <div class="form-group">
+          <label for="contactName">Contact Name *</label>
+          <input
+            type="text"
+            id="contactName"
+            formControlName="contactName"
+            class="form-control"
+            [ngClass]="{'is-invalid': studentForm.get('emergencyContact.contactName')?.invalid && studentForm.get('emergencyContact.contactName')?.touched}"
+          />
+          <div class="error-message" *ngIf="studentForm.get('emergencyContact.contactName')?.invalid && studentForm.get('emergencyContact.contactName')?.touched">
+            <span *ngIf="studentForm.get('emergencyContact.contactName')?.errors?.['required']">Contact Name is required</span>
+          </div>
+        </div>
+
+        <!-- Relationship -->
+        <div class="form-group">
+          <label for="relationship">Relationship *</label>
+          <input
+            type="text"
+            id="relationship"
+            formControlName="relationship"
+            class="form-control"
+            [ngClass]="{'is-invalid': studentForm.get('emergencyContact.relationship')?.invalid && studentForm.get('emergencyContact.relationship')?.touched}"
+          />
+          <div class="error-message" *ngIf="studentForm.get('emergencyContact.relationship')?.invalid && studentForm.get('emergencyContact.relationship')?.touched">
+            <span *ngIf="studentForm.get('emergencyContact.relationship')?.errors?.['required']">Relationship is required</span>
+          </div>
+        </div>
+
+        <!-- Contact Phone -->
+        <div class="form-group">
+          <label for="contactPhone">Contact Phone *</label>
+          <input
+            type="text"
+            id="contactPhone"
+            formControlName="contactPhone"
+            class="form-control"
+            placeholder="1234567890"
+            [ngClass]="{'is-invalid': studentForm.get('emergencyContact.contactPhone')?.invalid && studentForm.get('emergencyContact.contactPhone')?.touched}"
+          />
+          <div class="error-message" *ngIf="studentForm.get('emergencyContact.contactPhone')?.invalid && studentForm.get('emergencyContact.contactPhone')?.touched">
+            <span *ngIf="studentForm.get('emergencyContact.contactPhone')?.errors?.['required']">Contact Phone is required</span>
+            <span *ngIf="studentForm.get('emergencyContact.contactPhone')?.errors?.['pattern']">Phone must contain only digits</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="button-group">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="autoFillBasicInfo()"
+      >
+        Auto-fill Basic Information
+      </button>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="studentForm.invalid"
+      >
+        Submit
+      </button>
+      <button
+        type="button"
+        class="btn btn-danger"
+        (click)="resetForm()"
+      >
+        Reset
+      </button>
+    </div>
+  </form>
+
+  <!-- SUBMITTED DATA DISPLAY -->
+  <div *ngIf="submitted && submittedData" class="result-section">
+    <h2>Submitted Data</h2>
+    <pre>{{ submittedData | json }}</pre>
+  </div>
+</div>
